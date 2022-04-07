@@ -1,0 +1,15 @@
+export const auth = {
+    signUp:                jest.fn().mockReturnValue({ type: "signUp" }),
+    signUpSuccess:         jest.fn().mockReturnValue({ type: "signUpSuccess" }),
+    signUpError:           jest.fn().mockReturnValue({ type: "signUpError" }),
+    signIn:                jest.fn().mockReturnValue({ type: "signIn" }),
+    signInSuccess:         jest.fn().mockReturnValue({ type: "signInSuccess" }),
+    signInError:           jest.fn().mockReturnValue({ type: "signInError" }),
+    getCurrentUser:        jest.fn().mockReturnValue({ type: "getCurrentUser" }),
+    getCurrentUserSuccess: jest.fn().mockReturnValue({ type: "getCurrentUserSuccess" }),
+    getCurrentUserError:   jest.fn().mockReturnValue({ type: "getCurrentUserError" }),
+    signOut:               jest.fn().mockReturnValue({ type: "signOut" }),
+    signOutSuccess:        jest.fn().mockReturnValue({ type: "signOutSuccess" }),
+    signOutError:          jest.fn().mockReturnValue({ type: "signOutError" }),
+    clearError:            jest.fn().mockReturnValue({ type: "clearError" }),
+};

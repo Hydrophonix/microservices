@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: depl-elastic-worker
+spec:
+  selector:
+    matchLabels:
+      app: elastic-worker
+  template:
+    metadata:
+      labels:
+        app: elastic-worker
+    spec:
+      containers:
+      - name: elastic-worker
+        image: hydrophonix/elastic-worker
+        # resources:
+        #   requests:
+        #     cpu: 500m
+        #     memory: 256Mi
+        #   limits:
+        #     cpu: 1000m
+        #     memory: 512Mi
+        env:
+          - name: RABBITMQ_LOGIN
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: username
+          - name: RABBITMQ_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: password
+          - name: RABBITMQ_HOST
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: host
+          - name: RABBITMQ_PORT
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: port
+          - name: RABBITMQ_QUEUE
+            value: microservices
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: srv-elastic-worker
+spec:
+  selector:
+    app: elastic-worker
+  ports:
+  - name: elastic-worker
+    protocol: TCP
+    port: 3000
+    targetPort: 3000
