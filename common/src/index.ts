@@ -6,3 +6,4 @@ export * from "./interceptors";
 export * from "./pipes";
 export * from "./utils";
 export * from "./events";
+export * from "./interfaces";
