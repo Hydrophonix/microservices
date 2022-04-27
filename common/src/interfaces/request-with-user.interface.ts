@@ -2,8 +2,8 @@
 import { FastifyRequest } from "fastify";
 
 // Instruments
-import { CurrentUser } from "./current-user.interface";
+import { User } from "./user.interface";
 
 export interface RequestWithUser extends FastifyRequest {
-    user: CurrentUser;
+    user: User;
 }

@@ -1,7 +1,7 @@
 // Instruments
 import { Role } from "../enums";
 
-export interface CurrentUser {
+export interface User {
     id: string;
     username: string;
     email: string;
