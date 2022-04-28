@@ -7,3 +7,4 @@ export * from "./pipes";
 export * from "./utils";
 export * from "./events";
 export * from "./interfaces";
+export * from "./strategies";
