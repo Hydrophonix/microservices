@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feed-mongo-depl
+spec:
+  selector:
+    matchLabels:
+      app: feed-mongo
+  template:
+    metadata:
+      labels:
+        app: feed-mongo
+    spec:
+      containers:
+      - name: feed-mongo
+        image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: feed-mongo-srv
+spec:
+  selector:
+    app: feed-mongo
+  ports:
+  - name: feed-mongo
+    protocol: TCP
+    port: 27017
+    targetPort: 27017

@@ -3,6 +3,7 @@ kind: Config
 deploy:
   kubectl:
     manifests:
+      # - "https://download.elastic.co/downloads/eck/2.1.0/crds.yaml"
       - "./infra/k8s/*"
       - "./infra/k8s-dev/*"
 build:
@@ -18,8 +19,17 @@ build:
           - dest: "." 
             src: "src/**/*.ts" 
 
-    - image: hydrophonix/elastic-worker
-      context: elastic-worker
+    - image: hydrophonix/feed
+      context: feed
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: "." 
+            src: "src/**/*.ts" 
+
+    - image: hydrophonix/posts
+      context: posts
       docker:
         dockerfile: Dockerfile
       sync:
@@ -35,3 +45,5 @@ build:
         manual:
           - dest: "." 
             src: "src/**/*.ts"
+          - dest: "." 
+            src: "src/**/*.tsx"

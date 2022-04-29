@@ -16,6 +16,7 @@ import { AuthService } from "./services";
 // Instruments
 import { AppConfig }                  from "../../config";
 import { JwtStrategy, LocalStrategy } from "./strategies";
+import { RabbitmqProvider }           from "../rabbitmq";
 
 @Module({
     imports: [
@@ -33,6 +34,7 @@ import { JwtStrategy, LocalStrategy } from "./strategies";
         }),
     ],
     providers: [
+        RabbitmqProvider,
         AuthService,
         LocalStrategy,
         JwtStrategy,

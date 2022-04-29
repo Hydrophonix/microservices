@@ -1,0 +1,18 @@
+// Core
+import { Module } from "@nestjs/common";
+
+// Modules
+import { ConfigurationModule } from "./core/configuration";
+import { DatabaseModule }      from "./core/database";
+import { FeedModule }          from "./domains/feed/feed.module";
+import { UsersModule }         from "./domains/users/users.module";
+
+@Module({
+    imports: [
+        ConfigurationModule,
+        DatabaseModule,
+        UsersModule,
+        FeedModule,
+    ],
+})
+export class AppModule {}

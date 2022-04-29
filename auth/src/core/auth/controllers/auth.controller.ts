@@ -6,6 +6,7 @@ import {
     Get,
     HttpCode,
     HttpStatus,
+    Inject,
     NotFoundException,
     Post,
     Request,
@@ -21,8 +22,9 @@ import {
     ApiTags,
     ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { FastifyReply }                      from "fastify";
-import { CurrentUser, SerializeInterceptor } from "@hydro-microservices/common";
+import { FastifyReply }                                                  from "fastify";
+import { ClientProxy }                                                   from "@nestjs/microservices";
+import { CurrentUser, SerializeInterceptor, Subjects, UserCreatedEvent } from "@hydro-microservices/common";
 
 // Services
 import { AuthService }  from "../services";
@@ -38,6 +40,8 @@ import { JwtAuthGuard, LocalAuthGuard } from "../guards";
 @Controller("auth")
 export class AuthController {
     constructor(
+        @Inject("RABBITMQ_SERVICE")
+        private readonly rabbitmqService: ClientProxy,
         private readonly authService: AuthService,
         private readonly usersService: UsersService,
     ) {}
@@ -61,6 +65,12 @@ export class AuthController {
         const user = await this.usersService.create({
             ...createUserDto,
             password: hashedPassword,
+        });
+
+        this.rabbitmqService.emit<Subjects.UserCreated, UserCreatedEvent>(Subjects.UserCreated, {
+            id:       user.id,
+            username: user.username,
+            email:    user.email,
         });
 
         const authToken = this.authService.getJwtToken(user as unknown as UserDto);

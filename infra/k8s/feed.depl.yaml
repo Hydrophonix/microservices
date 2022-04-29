@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feed-depl
+spec:
+  selector:
+    matchLabels:
+      app: feed
+  template:
+    metadata:
+      labels:
+        app: feed
+    spec:
+      containers:
+      - name: feed
+        image: hydrophonix/feed
+        # resources:
+        #   requests:
+        #     cpu: 500m
+        #     memory: 256Mi
+        #   limits:
+        #     cpu: 1000m
+        #     memory: 512Mi
+        env:
+          - name: DATABASE_URI
+            value: mongodb://feed-mongo-srv:27017/auth
+          - name: RABBITMQ_LOGIN
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: username
+          - name: RABBITMQ_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: password
+          - name: RABBITMQ_HOST
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: host
+          - name: RABBITMQ_PORT
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: port
+          - name: RABBITMQ_QUEUE
+            value: microservices
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: feed-srv
+spec:
+  selector:
+    app: feed
+  ports:
+  - name: feed
+    protocol: TCP
+    port: 3000
+    targetPort: 3000

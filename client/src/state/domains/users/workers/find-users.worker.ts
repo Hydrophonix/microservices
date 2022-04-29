@@ -10,7 +10,7 @@ import { users }                             from "../users.slice";
 import { FindUsersPayload, FindUsersParams } from "../users.types";
 
 export function* callFindUsersWorker({ payload }: PayloadAction<FindUsersPayload|undefined>) {
-    yield delay(2000);
+    yield delay(300);
     try {
         const { skip, limit, order, sort } = yield* appSelect((state) => state.users);
         const params: FindUsersParams = {

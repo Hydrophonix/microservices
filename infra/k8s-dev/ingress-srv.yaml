@@ -12,7 +12,7 @@ spec:
   - host: microservices.dev
     http:
       paths:
-      - path: "/api/users/?(.*)"
+      - path: "/api/(auth|users)/?(.*)"
         pathType: Prefix
         backend:
           service:
@@ -20,21 +20,21 @@ spec:
             port: 
               number: 3000
 
-      - path: "/api/auth/?(.*)"
+      - path: "/api/feed/?(.*)"
         pathType: Prefix
         backend:
           service:
-            name: auth-srv
+            name: feed-srv
             port: 
               number: 3000
 
-      - path: "/rabbit?(.*)"
+      - path: "/api/posts/?(.*)"
         pathType: Prefix
         backend:
           service:
-            name: service-rabbitmq
+            name: posts-srv
             port: 
-              number: 15672
+              number: 3000
 
       - path: "/?(.*)"
         pathType: Prefix

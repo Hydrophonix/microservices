@@ -5,8 +5,10 @@ import { Route, Switch }    from "react-router";
 
 // Pages
 import {
+    CreatePostPage,
     CreateUserPage,
     EditUserPage,
+    FeedPage,
     HomePage,
     NotFoundPage,
     Profile,
@@ -14,12 +16,14 @@ import {
     SignUp,
     UsersPage,
 } from "../../pages";
-import { useAppSelector } from "../../state";
-import { AdminRoute }     from "./admin-route";
 
-// Instruments
+// Components
+import { AdminRoute }        from "./admin-route";
 import { AuthRedirectRoute } from "./auth-redirect-route";
 import { PrivateRoute }      from "./private-route";
+
+// Instruments
+import { useAppSelector } from "../../state";
 
 export const AppRouter: FC = () => {
     const isLoading = useAppSelector((state) => state.auth.isLoading);
@@ -35,6 +39,13 @@ export const AppRouter: FC = () => {
             <PrivateRoute path = "/profile">
                 <Profile />
             </PrivateRoute>
+            <PrivateRoute path = "/feed">
+                <FeedPage />
+            </PrivateRoute>
+            <PrivateRoute path = "/create-post">
+                <CreatePostPage />
+            </PrivateRoute>
+
 
             <AuthRedirectRoute path = "/signup">
                 <SignUp />
@@ -52,6 +63,7 @@ export const AppRouter: FC = () => {
             <AdminRoute path = "/users">
                 <UsersPage />
             </AdminRoute>
+
 
             <Route
                 exact
