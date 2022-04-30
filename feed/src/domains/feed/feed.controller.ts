@@ -1,9 +1,12 @@
 // Core
-import { ParseObjectIdPipe }      from "@hydro-microservices/common";
-import { Controller, Get, Param } from "@nestjs/common";
+import { ParseObjectIdPipe, SerializeInterceptor } from "@hydro-microservices/common";
+import { Controller, Get, Param, UseInterceptors } from "@nestjs/common";
 
 // Services
 import { FeedService } from "./feed.service";
+
+// Instruments
+import { FeedDto } from "./dto";
 
 @Controller("feed")
 export class FeedController {
@@ -18,7 +21,8 @@ export class FeedController {
 
 
     @Get(":id")
+    @UseInterceptors(new SerializeInterceptor(FeedDto))
     getOne(@Param("id", ParseObjectIdPipe) id: string) {
-        return this.feedService.findOne(id);
+        return this.feedService.findOneByUserId(id);
     }
 }

@@ -23,7 +23,7 @@ spec:
         #     memory: 512Mi
         env:
           - name: DATABASE_URI
-            value: mongodb://feed-mongo-srv:27017/auth
+            value: mongodb://feed-mongo-srv:27017/feed
           - name: RABBITMQ_LOGIN
             valueFrom:
               secretKeyRef:

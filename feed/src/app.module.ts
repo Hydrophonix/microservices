@@ -2,8 +2,9 @@
 import { Module } from "@nestjs/common";
 
 // Modules
-import { ConfigurationModule } from "./core/configuration";
 import { DatabaseModule }      from "./core/database";
+import { ConfigurationModule } from "./core/configuration";
+import { PostsModule }         from "./domains/posts/posts.module";
 import { FeedModule }          from "./domains/feed/feed.module";
 import { UsersModule }         from "./domains/users/users.module";
 
@@ -13,6 +14,7 @@ import { UsersModule }         from "./domains/users/users.module";
         DatabaseModule,
         UsersModule,
         FeedModule,
+        PostsModule,
     ],
 })
 export class AppModule {}

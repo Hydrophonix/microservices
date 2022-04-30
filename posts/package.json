@@ -22,7 +22,7 @@
         "test:e2e": "jest --config ./test/jest-e2e.json"
     },
     "dependencies": {
-        "@hydro-microservices/common": "^1.0.10",
+        "@hydro-microservices/common": "^1.0.15",
         "@nestjs/cli": "^8.1.5",
         "@nestjs/common": "^8.2.2",
         "@nestjs/config": "^1.1.0",
@@ -58,7 +58,7 @@
         "ts-node": "^9.1.1",
         "tsconfig-paths": "^3.9.0",
         "typescript": "^4.2.3",
-        "webpack": "^5.28.0",
+        "webpack": "^5.72.0",
         "webpack-node-externals": "^2.5.2"
     },
     "devDependencies": {

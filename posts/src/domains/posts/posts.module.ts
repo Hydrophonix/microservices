@@ -6,7 +6,8 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { PostsController } from "./posts.controller";
 
 // Services
-import { PostsService } from "./posts.service";
+import { RabbitmqService } from "../../core/rabbitmq";
+import { PostsService }    from "./posts.service";
 
 // Instruments
 import { Post, PostSchema } from "./posts.schema";
@@ -17,7 +18,10 @@ import { Post, PostSchema } from "./posts.schema";
             [{ name: Post.name, schema: PostSchema }],
         ),
     ],
-    providers:   [ PostsService ],
+    providers: [
+        PostsService,
+        RabbitmqService,
+    ],
     controllers: [ PostsController ],
 })
 export class PostsModule {}

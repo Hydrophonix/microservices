@@ -1,6 +1,22 @@
 // Core
-import { Body, Controller, Post, UseGuards, UseInterceptors }    from "@nestjs/common";
-import { CurrentUser, JwtAuthGuard, SerializeInterceptor, User } from "@hydro-microservices/common";
+import {
+    Body,
+    Controller,
+    Inject,
+    Post,
+    UseGuards,
+    UseInterceptors,
+}    from "@nestjs/common";
+import {
+    CurrentUser,
+    JwtAuthGuard,
+    PostCreatedEvent,
+    RABBITMQ_SERVICE,
+    SerializeInterceptor,
+    Subjects,
+    User,
+} from "@hydro-microservices/common";
+import { ClientProxy } from "@nestjs/microservices";
 
 // Services
 import { PostsService }           from "./posts.service";
@@ -11,6 +27,8 @@ import { Post as PostDoc }        from "./posts.schema";
 @UseGuards(JwtAuthGuard)
 export class PostsController {
     constructor(
+        @Inject(RABBITMQ_SERVICE)
+        private readonly rabbitmqService: ClientProxy,
         private readonly postsService: PostsService,
     ) {}
 
@@ -20,8 +38,15 @@ export class PostsController {
         @CurrentUser() { id }: User,
         @Body() createPostDto: CreatePostDto, // eslint-disable-line @typescript-eslint/indent
     ): Promise<PostDoc> {
-        const doc = await this.postsService.create(id, createPostDto);
+        const post = await this.postsService.create(id, createPostDto);
 
-        return doc;
+        this.rabbitmqService.emit<Subjects.UserCreated, PostCreatedEvent>(Subjects.PostCreated, {
+            id:      post._id,
+            userId:  post.userId,
+            title:   post.title,
+            content: post.content,
+        });
+
+        return post;
     }
 }

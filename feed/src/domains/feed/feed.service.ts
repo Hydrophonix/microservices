@@ -20,10 +20,15 @@ export class FeedService {
 
 
     getAll() {
-        return this.feedModel.find();
+        return this.feedModel.find().exec();
     }
 
-    findOne(id: string) {
-        return this.feedModel.findById(id);
+
+    findOneById(id: string) {
+        return this.feedModel.findById(id).exec();
+    }
+
+    findOneByUserId(userId: string) {
+        return this.feedModel.findOne({ userId }).exec();
     }
 }

@@ -7,6 +7,7 @@ import { Document, Types }             from "mongoose";
 // Instruments
 // import { Role } from "../../core/auth/role.enum";
 
+@Schema({ _id: false })
 class Post extends Document {
     @Prop({ required: true })
     id: string;
@@ -18,17 +19,17 @@ class Post extends Document {
     content: string;
 
     @Prop({ required: false, type: [ String ]})
-    likes: string[];
+    comments: string[];
 }
 
 const PostSchema = SchemaFactory.createForClass(Post);
 
 @Schema()
 export class Feed extends Document {
-    @Prop({ required: true })
+    @Prop({ required: true, unique: true })
     userId: string;
 
-    @Prop({ type: PostSchema })
+    @Prop({ type: [ PostSchema ]})
     posts: Post[];
 }
 

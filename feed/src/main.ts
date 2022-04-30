@@ -1,13 +1,13 @@
 // Core
-import { NestFactory }                                                from "@nestjs/core";
-import { Logger }                                                     from "@nestjs/common";
-import { FastifyAdapter, NestFastifyApplication }                     from "@nestjs/platform-fastify";
-import { Transport }                                                  from "@nestjs/microservices";
-import { ConfigService }                                              from "@nestjs/config";
-import fastifyCookie                                                  from "fastify-cookie";
-import fastifyHelmet                                                  from "fastify-helmet";
-import fastifyCsrf                                                    from "fastify-csrf";
-import { AllExceptionsFilter, AppValidationPipe, LoggingInterceptor } from "@hydro-microservices/common";
+import { NestFactory }                                                        from "@nestjs/core";
+import { Logger }                                                             from "@nestjs/common";
+import { FastifyAdapter, NestFastifyApplication }                             from "@nestjs/platform-fastify";
+import { Transport }                                                          from "@nestjs/microservices";
+import { ConfigService }                                                      from "@nestjs/config";
+import fastifyCookie                                                          from "fastify-cookie";
+import fastifyHelmet                                                          from "fastify-helmet";
+import fastifyCsrf                                                            from "fastify-csrf";
+import { AllExceptionsFilter, AppValidationPipe, LoggingInterceptor, Queues } from "@hydro-microservices/common";
 
 // App
 import { AppModule } from "./app.module";
@@ -55,11 +55,9 @@ declare const module: any;
     app.useGlobalInterceptors(new LoggingInterceptor());
     app.useGlobalPipes(AppValidationPipe);
 
-    const host = configService.get("RABBITMQ_HOST");
-    const port = configService.get("RABBITMQ_PORT");
+    const rabbitmqUrl = configService.get("RABBITMQ_URL");
     const login = configService.get("RABBITMQ_LOGIN");
     const password = configService.get("RABBITMQ_PASSWORD");
-    const queue = configService.get("RABBITMQ_QUEUE");
 
     console.log("<<=|X|=>> ~ file: main.ts ~ line 19 ~ bootstrap ~ login", login);
     console.log("<<=|X|=>> ~ file: main.ts ~ line 21 ~ bootstrap ~ password", password);
@@ -67,8 +65,19 @@ declare const module: any;
     app.connectMicroservice({
         transport: Transport.RMQ,
         options:   {
-            urls:         [ `amqp://${login}:${password}@${host}:${port}` ],
-            queue,
+            urls:         [ rabbitmqUrl ],
+            queue:        Queues.USERS,
+            noAck:        false,
+            queueOptions: {
+                durable: true,
+            },
+        },
+    });
+    app.connectMicroservice({
+        transport: Transport.RMQ,
+        options:   {
+            urls:         [ rabbitmqUrl ],
+            queue:        Queues.POSTS,
             noAck:        false,
             queueOptions: {
                 durable: true,

@@ -18,5 +18,5 @@ export class PostDto {
 
     @Expose()
     @ApiProperty()
-    role: string;
+    content: string;
 }

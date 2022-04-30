@@ -28,6 +28,7 @@ import {
 import {
     PaginationParams,
     ParseObjectIdPipe,
+    RABBITMQ_SERVICE,
     SerializeInterceptor,
     Subjects,
     UserCreatedEvent,
@@ -64,7 +65,7 @@ import { FindUsersResponse } from "../types";
 @ApiForbiddenResponse({ description: "Forbidden resource" })
 export class UsersController {
     constructor(
-        @Inject("RABBITMQ_SERVICE")
+        @Inject(RABBITMQ_SERVICE)
         private readonly rabbitmqService: ClientProxy,
         private readonly usersService: UsersService,
         private readonly authService: AuthService,
