@@ -1,6 +1,7 @@
 // Core
-import { PayloadAction }             from "@reduxjs/toolkit";
-import { call, put, SagaReturnType } from "redux-saga/effects";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { call, put }     from "redux-saga/effects";
+import { push }          from "connected-react-router";
 
 // Instruments
 import { postsAPI }       from "../posts.api";
@@ -9,12 +10,12 @@ import { normalizeError } from "../../../utils";
 
 export function* callDeletePostWorker({ payload }: PayloadAction<string>) {
     try {
-        const { data }: SagaReturnType<typeof postsAPI.get> = yield call(postsAPI.get, payload);
-
-        yield put(posts.getSuccess(data));
+        yield call(postsAPI.delete, payload);
+        yield put(posts.deleteSuccess());
+        yield put(push("/feed"));
     } catch (error) {
         const serverError = normalizeError(error);
 
-        yield put(posts.getError(serverError));
+        yield put(posts.deleteError(serverError));
     }
 }

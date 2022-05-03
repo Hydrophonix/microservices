@@ -1,12 +1,15 @@
 // Core
 import { Box, Button, TextField } from "@mui/material";
 import { FC, useState }           from "react";
+import { posts, useAppDispatch }  from "../../state";
 
 interface PostControlPanelProps {
     postId: string;
 }
 
 export const PostControlPanel: FC<PostControlPanelProps> = ({ postId }) => {
+    const dispatch = useAppDispatch();
+
     const [ comment, setComment ] = useState("");
 
     return (
@@ -30,7 +33,8 @@ export const PostControlPanel: FC<PostControlPanelProps> = ({ postId }) => {
             </Box>
             <Button
                 color = "error"
-                variant = "contained">
+                variant = "contained"
+                onClick = { () => dispatch(posts.delete(postId)) }>
                 DELETE POST
             </Button>
         </Box>

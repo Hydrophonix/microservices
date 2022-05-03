@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comments-depl
+spec:
+  selector:
+    matchLabels:
+      app: comments
+  template:
+    metadata:
+      labels:
+        app: comments
+    spec:
+      containers:
+      - name: comments
+        image: hydrophonix/comments
+        # resources:
+        #   requests:
+        #     cpu: 500m
+        #     memory: 256Mi
+        #   limits:
+        #     cpu: 1000m
+        #     memory: 512Mi
+        env:
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: JWT_KEY
+          - name: DATABASE_URI
+            value: mongodb://comments-mongo-srv:27017/comments
+          - name: RABBITMQ_LOGIN
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: username
+          - name: RABBITMQ_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: password
+          - name: RABBITMQ_HOST
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: host
+          - name: RABBITMQ_PORT
+            valueFrom:
+              secretKeyRef:
+                name: service-rabbitmq-default-user
+                key: port
+          - name: RABBITMQ_QUEUE
+            value: microservices
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-srv
+spec:
+  selector:
+    app: comments
+  ports:
+  - name: comments
+    protocol: TCP
+    port: 3000
+    targetPort: 3000

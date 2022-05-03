@@ -16,6 +16,7 @@ import {
     JwtAuthGuard,
     ParseObjectIdPipe,
     PostCreatedEvent,
+    PostDeletedEvent,
     RABBITMQ_SERVICE,
     SerializeInterceptor,
     Subjects,
@@ -71,11 +72,19 @@ export class PostsController {
 
 
     @Delete(":id")
-    async deleteOne(@Param("id", ParseObjectIdPipe) id: string) {
+    async deleteOne(
+    @CurrentUser() user: User,
+        @Param("id", ParseObjectIdPipe) id: string, // eslint-disable-line @typescript-eslint/indent
+    ) {
         const { deletedCount } = await this.postsService.deleteOneById(id);
 
         if (deletedCount !== 1) {
-            throw new NotFoundException("User not found");
+            throw new NotFoundException("Post not found");
         }
+
+        this.rabbitmqService.emit<Subjects.PostDeleted, PostDeletedEvent>(Subjects.PostDeleted, {
+            id,
+            userId: user.id,
+        });
     }
 }

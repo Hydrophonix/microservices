@@ -41,5 +41,19 @@ export const { actions: posts, reducer: postsReducer } = createSlice({
             state.edit = null;
             state.error = payload;
         },
+
+
+        delete(state, _action: PayloadAction<string>) {
+            state.loading = true;
+        },
+        deleteSuccess(state) {
+            state.loading = false;
+            state.error = null;
+            state.edit = null;
+        },
+        deleteError(state, { payload }: PayloadAction<ServerError>) {
+            state.loading = false;
+            state.error = payload;
+        },
     },
 });

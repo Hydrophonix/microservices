@@ -37,6 +37,15 @@ build:
           - dest: "." 
             src: "src/**/*.ts" 
 
+    - image: hydrophonix/comments
+      context: comments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: "." 
+            src: "src/**/*.ts" 
+
     - image: hydrophonix/client
       context: client
       docker:
