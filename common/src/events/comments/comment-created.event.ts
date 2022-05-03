@@ -3,4 +3,5 @@ export interface CommentCreatedEvent {
     userId: string;
     postId: string;
     content: string;
+    username: string;
 }

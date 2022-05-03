@@ -1,6 +1,6 @@
 {
   "name": "@hydro-microservices/common",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "Shared lib with common tools",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
