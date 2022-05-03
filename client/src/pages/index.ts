@@ -8,3 +8,4 @@ export * from "./create-user-page";
 export * from "./edit-user-page";
 export * from "./feed-page";
 export * from "./create-post-page";
+export * from "./post-page";

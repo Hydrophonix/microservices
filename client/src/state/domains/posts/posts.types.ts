@@ -4,11 +4,13 @@ export interface Post {
     id: string;
     title: string;
     content: string;
+    comments: string[];
 }
 
 export interface PostsState {
     loading: boolean;
     error: ServerError | null;
+    edit: Post | null;
 }
 
 export interface CreatePostPayload {

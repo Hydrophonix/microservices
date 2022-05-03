@@ -1,13 +1,13 @@
 // Core
-import { CircularProgress, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
-import {  AccessTime }                                                    from "@mui/icons-material";
-import { FC }                                                             from "react";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { FC }                                from "react";
 
 // Instruments
 import { useAppSelector } from "../../../state";
+import { Post }           from "./post";
 
 export const Feed: FC = () => {
-    const isLoading = useAppSelector((state) => state.feed.isLoading);
+    const { isLoading, posts } = useAppSelector((state) => state.feed);
 
     if (isLoading) {
         return (
@@ -15,16 +15,28 @@ export const Feed: FC = () => {
         );
     }
 
+    if (!posts.length) {
+        return (
+            <Typography
+                align = "center"
+                variant = "h5">
+                There is no posts yet...
+            </Typography>
+        );
+    }
+
     return (
-        <List>
-            <ListItem>
-                <ListItemAvatar>
-                    <AccessTime/>
-                </ListItemAvatar>
-                <ListItemText>
-                    TYext
-                </ListItemText>
-            </ListItem>
-        </List>
+        <Box sx = {{
+            minWidth:       "65%",
+            display:        "flex",
+            flexDirection:  "column",
+            justifyContent: "center" }}>
+            {posts.map((post) => (
+                <Post
+                    key = { post.id }
+                    post = { post }
+                />
+            ))}
+        </Box>
     );
 };

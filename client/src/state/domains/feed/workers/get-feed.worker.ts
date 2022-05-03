@@ -15,7 +15,6 @@ export function* callGetFeedWorker({ payload }: PayloadAction<string|undefined>)
 
     try {
         const { data }: SagaReturnType<typeof feedAPI.getOne> = yield call(feedAPI.getOne, id);
-        console.log("<<=|X|=>> ~ file: get.worker.ts ~ line 12 ~ function*callGetFeedWorker ~ data", data);
 
         yield put(feed.getSuccess(data));
     } catch (error) {

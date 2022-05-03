@@ -2,7 +2,11 @@
 import {
     Body,
     Controller,
+    Delete,
+    Get,
     Inject,
+    NotFoundException,
+    Param,
     Post,
     UseGuards,
     UseInterceptors,
@@ -10,6 +14,7 @@ import {
 import {
     CurrentUser,
     JwtAuthGuard,
+    ParseObjectIdPipe,
     PostCreatedEvent,
     RABBITMQ_SERVICE,
     SerializeInterceptor,
@@ -32,6 +37,7 @@ export class PostsController {
         private readonly postsService: PostsService,
     ) {}
 
+
     @Post()
     @UseInterceptors(new SerializeInterceptor(PostDto))
     async create(
@@ -48,5 +54,28 @@ export class PostsController {
         });
 
         return post;
+    }
+
+
+    @Get(":id")
+    @UseInterceptors(new SerializeInterceptor(PostDto))
+    async findOne(@Param("id", ParseObjectIdPipe) id: string): Promise<PostDoc> {
+        const post = await this.postsService.findOneById(id);
+
+        if (!post) {
+            throw new NotFoundException("Post not found");
+        }
+
+        return post;
+    }
+
+
+    @Delete(":id")
+    async deleteOne(@Param("id", ParseObjectIdPipe) id: string) {
+        const { deletedCount } = await this.postsService.deleteOneById(id);
+
+        if (deletedCount !== 1) {
+            throw new NotFoundException("User not found");
+        }
     }
 }

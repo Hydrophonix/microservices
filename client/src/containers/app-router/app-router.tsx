@@ -11,6 +11,7 @@ import {
     FeedPage,
     HomePage,
     NotFoundPage,
+    PostPage,
     Profile,
     SignIn,
     SignUp,
@@ -44,6 +45,9 @@ export const AppRouter: FC = () => {
             </PrivateRoute>
             <PrivateRoute path = "/create-post">
                 <CreatePostPage />
+            </PrivateRoute>
+            <PrivateRoute path = "/posts/:postId">
+                <PostPage />
             </PrivateRoute>
 
 

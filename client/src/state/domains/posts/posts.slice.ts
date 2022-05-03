@@ -2,12 +2,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Instruments
-import { ServerError }                   from "../../axios-client";
-import { CreatePostPayload, PostsState } from "./posts.types";
+import { ServerError }                         from "../../axios-client";
+import { CreatePostPayload, Post, PostsState } from "./posts.types";
 
 export const initialState: PostsState = {
-    loading: true,
+    loading: false,
     error:   null,
+    edit:    null,
 };
 
 export const { actions: posts, reducer: postsReducer } = createSlice({
@@ -23,6 +24,21 @@ export const { actions: posts, reducer: postsReducer } = createSlice({
         },
         createError(state, { payload }: PayloadAction<ServerError>) {
             state.loading = false;
+            state.error = payload;
+        },
+
+
+        get(state, _action: PayloadAction<string>) {
+            state.loading = true;
+        },
+        getSuccess(state, { payload }: PayloadAction<Post>) {
+            state.edit = payload;
+            state.loading = false;
+            state.error = null;
+        },
+        getError(state, { payload }: PayloadAction<ServerError>) {
+            state.loading = false;
+            state.edit = null;
             state.error = payload;
         },
     },

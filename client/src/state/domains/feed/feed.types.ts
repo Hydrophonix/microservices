@@ -1,10 +1,5 @@
 import { ServerError } from "../../axios-client";
-
-export interface Post {
-    id: string;
-    title: string;
-    content: string;
-}
+import { Post }        from "../posts/posts.types";
 
 export interface Feed {
     userId: string;
