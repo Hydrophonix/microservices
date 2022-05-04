@@ -5,12 +5,18 @@ import { posts, useAppDispatch }  from "../../state";
 
 interface PostControlPanelProps {
     postId: string;
+    author?: string;
 }
 
-export const PostControlPanel: FC<PostControlPanelProps> = ({ postId }) => {
+export const PostControlPanel: FC<PostControlPanelProps> = ({ postId, author }) => {
     const dispatch = useAppDispatch();
 
     const [ comment, setComment ] = useState("");
+
+    // const handleAddComment = () => {
+    //     dispatch(comments)
+    //     setComment("");
+    // }
 
     return (
         <Box sx = {{

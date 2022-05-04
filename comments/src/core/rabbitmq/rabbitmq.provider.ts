@@ -15,7 +15,7 @@ export const RabbitmqService: FactoryProvider = {
             transport: Transport.RMQ,
             options:   {
                 urls:         [ configService.get("RABBITMQ_URL") ],
-                queue:        Queues.POSTS,
+                queue:        Queues.COMMENTS,
                 queueOptions: {
                     durable: true,
                 },

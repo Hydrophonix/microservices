@@ -34,7 +34,7 @@ export const PostPage: FC = () => {
         );
     }
 
-    if (error && !post) {
+    if (!post && error) {
         return (
             <Box sx = {{ display: "flex", flexDirection: "column" }}>
                 <Typography
@@ -62,7 +62,10 @@ export const PostPage: FC = () => {
                 {post?.content}
             </Typography>
 
-            <PostControlPanel postId = { post!.id } />
+            <PostControlPanel
+                author = { post?.userId }
+                postId = { post!.id }
+            />
         </PageContainer>
     );
 };
