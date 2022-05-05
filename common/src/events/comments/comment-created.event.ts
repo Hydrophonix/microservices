@@ -2,7 +2,7 @@ export interface CommentCreatedEvent {
     id: string;
     userId: string;
     postId: string;
-    feedId: string;
+    feedOwnerId: string;
     content: string;
     username: string;
 }
