@@ -15,5 +15,6 @@ export interface CommentsState {
 
 export interface CreateCommentPayload {
     postId: string;
+    userId?: string;
     content: string;
 }

@@ -84,6 +84,17 @@ declare const module: any;
             },
         },
     });
+    app.connectMicroservice({
+        transport: Transport.RMQ,
+        options:   {
+            urls:         [ rabbitmqUrl ],
+            queue:        Queues.COMMENTS,
+            noAck:        false,
+            queueOptions: {
+                durable: true,
+            },
+        },
+    });
 
     app.setGlobalPrefix("api");
     app.enableShutdownHooks();

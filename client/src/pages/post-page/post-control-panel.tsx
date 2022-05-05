@@ -1,22 +1,29 @@
 // Core
 import { Box, Button, TextField } from "@mui/material";
 import { FC, useState }           from "react";
-import { posts, useAppDispatch }  from "../../state";
+
+// Instruments
+import { posts, useAppDispatch } from "../../state";
+import { comments }              from "../../state/domains/comments";
 
 interface PostControlPanelProps {
     postId: string;
-    author?: string;
+    userId?: string;
 }
 
-export const PostControlPanel: FC<PostControlPanelProps> = ({ postId, author }) => {
+export const PostControlPanel: FC<PostControlPanelProps> = ({ postId, userId }) => {
     const dispatch = useAppDispatch();
 
     const [ comment, setComment ] = useState("");
 
-    // const handleAddComment = () => {
-    //     dispatch(comments)
-    //     setComment("");
-    // }
+    const handleAddComment = () => {
+        dispatch(comments.create({
+            content: comment,
+            postId,
+            userId,
+        }));
+        setComment("");
+    };
 
     return (
         <Box sx = {{
@@ -33,7 +40,9 @@ export const PostControlPanel: FC<PostControlPanelProps> = ({ postId, author }) 
                     value = { comment }
                     onChange = { (event) => setComment(event.target.value) }
                 />
-                <Button variant = "contained">
+                <Button
+                    variant = "contained"
+                    onClick = { handleAddComment }>
                     ADD COMMENT
                 </Button>
             </Box>

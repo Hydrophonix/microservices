@@ -8,7 +8,6 @@ export interface Feed {
 }
 
 export interface FeedState {
-    id: string;
     isLoading: boolean;
     posts: Post[];
     userId: string;

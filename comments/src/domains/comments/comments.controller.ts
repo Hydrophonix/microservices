@@ -50,11 +50,12 @@ export class CommentsController {
         const comment = await this.commentsService.create(user.id, user.username, createCommentDto);
 
         this.rabbitmqService.emit<Subjects.CommentCreated, CommentCreatedEvent>(Subjects.CommentCreated, {
-            id:       comment._id,
-            userId:   comment.userId,
-            postId:   comment.postId,
-            content:  comment.content,
-            username: comment.username,
+            id:          comment._id,
+            userId:      comment.userId,
+            postId:      comment.postId,
+            content:     comment.content,
+            username:    comment.username,
+            feedOwnerId: createCommentDto.userId,
         });
 
         return comment;

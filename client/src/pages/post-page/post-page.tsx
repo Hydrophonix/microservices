@@ -1,13 +1,14 @@
 // Core
-import { FC, useEffect }                             from "react";
-import { useLocation, useParams }                    from "react-router-dom";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { FC, useEffect }                from "react";
+import { useLocation, useParams }       from "react-router-dom";
+import { CircularProgress, Typography } from "@mui/material";
 
 // Components
 import { PageBackHeader } from "../../components";
+import { Comments }       from "./comments";
 
 // Elements
-import { PageContainer } from "../../elements";
+import { Error, PageContainer } from "../../elements";
 
 // Instruments
 import { Post }                                  from "../../state/domains/posts/posts.types";
@@ -22,11 +23,13 @@ export const PostPage: FC = () => {
 
     const post = state || edit;
 
+
     useEffect(() => {
         if (postId !== post?.id) {
             dispatch(posts.get(postId));
         }
     }, [ postId, dispatch, post ]);
+
 
     if (loading || (!post && !error)) {
         return (
@@ -36,19 +39,7 @@ export const PostPage: FC = () => {
 
     if (!post && error) {
         return (
-            <Box sx = {{ display: "flex", flexDirection: "column" }}>
-                <Typography
-                    color = { (theme) => theme.palette.error.main }
-                    variant = "h4">
-                    Error: {error.statusCode}
-                </Typography>
-                <Typography
-                    align = "center"
-                    color = { (theme) => theme.palette.error.dark }
-                    variant = "subtitle1">
-                    {error.message}
-                </Typography>
-            </Box>
+            <Error error = { error }/>
         );
     }
 
@@ -63,9 +54,11 @@ export const PostPage: FC = () => {
             </Typography>
 
             <PostControlPanel
-                author = { post?.userId }
                 postId = { post!.id }
+                userId = { post?.userId }
             />
+
+            <Comments />
         </PageContainer>
     );
 };

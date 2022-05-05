@@ -14,6 +14,11 @@ export class CreateCommentDto {
 
     @IsNotEmpty()
     @IsString()
+    @IsMongoId()
+    userId: string;
+
+    @IsNotEmpty()
+    @IsString()
     @MaxLength(200)
     content: string;
 }

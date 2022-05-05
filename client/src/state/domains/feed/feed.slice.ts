@@ -6,7 +6,6 @@ import { ServerError }     from "../../axios-client";
 import { Feed, FeedState } from "./feed.types";
 
 export const initialState: FeedState = {
-    id:        "",
     isLoading: true,
     userId:    "",
     posts:     [],
@@ -25,13 +24,11 @@ export const { actions: feed, reducer: feedReducer } = createSlice({
             state.error = null;
             state.userId = payload.userId;
             state.posts = payload.posts;
-            state.id = payload.id;
         },
         getError(state, { payload }: PayloadAction<ServerError>) {
             state.isLoading = false;
             state.userId = "";
             state.posts = [];
-            state.id = "";
             state.error = payload;
         },
     },

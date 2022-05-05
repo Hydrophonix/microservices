@@ -3,20 +3,8 @@ import { ApiProperty }             from "@nestjs/swagger";
 import { Expose, Transform, Type } from "class-transformer";
 
 // Instruments
+import { PostDto } from "../../posts/dto";
 
-class Post {
-    @Expose()
-    id: string;
-
-    @Expose()
-    title: string;
-
-    @Expose()
-    content: string;
-
-    @Expose()
-    comments: string[];
-}
 
 export class FeedDto {
     @Expose()
@@ -29,7 +17,7 @@ export class FeedDto {
     userId: string;
 
     @Expose()
-    @Type(() => Post)
+    @Type(() => PostDto)
     @ApiProperty()
-    posts: Post[];
+    posts: PostDto[];
 }

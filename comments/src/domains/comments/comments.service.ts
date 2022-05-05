@@ -16,7 +16,7 @@ export class CommentsService {
     ) {}
 
     create(userId: string, username: string, createCommentDTO: CreateCommentDto): Promise<Comment> {
-        return this.commentModel.create({ userId, username, ...createCommentDTO });
+        return this.commentModel.create({ ...createCommentDTO, userId, username });
     }
 
     findMany(postId: string, userId): Promise<Comment[]> {
