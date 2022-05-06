@@ -1,5 +1,5 @@
 export interface CommentDeletedEvent {
     id: string;
-    userId: string;
+    feedOwnerId: string;
     postId: string;
 }
