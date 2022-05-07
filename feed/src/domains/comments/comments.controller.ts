@@ -1,7 +1,7 @@
 // Core
-import { CommentCreatedEvent, Subjects }          from "@hydro-microservices/common";
-import { Controller, NotFoundException }          from "@nestjs/common";
-import { Ctx, EventPattern, Payload, RmqContext } from "@nestjs/microservices";
+import { CommentCreatedEvent, CommentDeletedEvent, Subjects } from "@hydro-microservices/common";
+import { Controller, NotFoundException }                      from "@nestjs/common";
+import { Ctx, EventPattern, Payload, RmqContext }             from "@nestjs/microservices";
 
 // Services
 import { FeedService } from "../feed/feed.service";
@@ -15,7 +15,7 @@ export class CommentsController {
 
 
     @EventPattern(Subjects.CommentCreated)
-    async postCreated(
+    async commentCreated(
         @Payload() data: CommentCreatedEvent,
         @Ctx() context: RmqContext, // eslint-disable-line @typescript-eslint/indent
     ): Promise<void> {
@@ -55,26 +55,38 @@ export class CommentsController {
     }
 
 
-    // @EventPattern(Subjects.PostDeleted)
-    // async postDeleted(
-    //     @Payload() data: PostDeletedEvent,
-    //     @Ctx() context: RmqContext, // eslint-disable-line @typescript-eslint/indent
-    // ): Promise<void> {
-    //     const feed = await this.feedService.findOneByUserId(data.userId);
+    @EventPattern(Subjects.CommentDeleted)
+    async commentDeleted(
+        @Payload() data: CommentDeletedEvent,
+        @Ctx() context: RmqContext, // eslint-disable-line @typescript-eslint/indent
+    ): Promise<void> {
+        const feed = await this.feedService.findOneByUserId(data.feedOwnerId);
 
-    //     if (!feed) {
-    //         throw new NotFoundException(`Feed for user:${data.userId} not found`);
-    //     }
+        if (!feed) {
+            throw new NotFoundException(`Feed for user:${data.feedOwnerId} not found`);
+        }
 
-    //     feed.set({
-    //         posts: feed.posts.filter((post) => post.id !== data.id),
-    //     });
+        const post = feed.posts.find((post) => post.id === data.postId);
 
-    //     await feed.save();
+        if (!post) {
+            throw new NotFoundException(`Post for user:${data.feedOwnerId} not found`);
+        }
 
-    //     const channel = context.getChannelRef();
-    //     const originalMsg = context.getMessage();
+        const posts = feed.posts.map((post) => {
+            if (post.id === data.postId) {
+                post.comments = post.comments.filter((comment) => comment.id !== data.id);
+            }
 
-    //     channel.ack(originalMsg);
-    // }
+            return post;
+        });
+
+        feed.set({ posts });
+
+        await feed.save();
+
+        const channel = context.getChannelRef();
+        const originalMsg = context.getMessage();
+
+        channel.ack(originalMsg);
+    }
 }

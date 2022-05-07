@@ -32,6 +32,7 @@ import {
     SerializeInterceptor,
     Subjects,
     UserCreatedEvent,
+    UserDeletedEvent,
 } from "@hydro-microservices/common";
 import { ClientProxy } from "@nestjs/microservices";
 
@@ -146,6 +147,10 @@ export class UsersController {
     @ApiNotFoundResponse({ description: "User not found" })
     async deleteOne(@Param("id", ParseObjectIdPipe) id: string) {
         const { deletedCount } = await this.usersService.deleteOneById(id);
+
+        this.rabbitmqService.emit<Subjects.UserDeleted, UserDeletedEvent>(Subjects.UserDeleted, {
+            id,
+        });
 
         if (deletedCount !== 1) {
             throw new NotFoundException("User not found");

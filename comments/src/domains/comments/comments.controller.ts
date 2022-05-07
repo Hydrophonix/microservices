@@ -19,6 +19,7 @@ import {
     NotFoundException,
     Param,
     Post,
+    UnauthorizedException,
     UseGuards,
     UseInterceptors,
 } from "@nestjs/common";
@@ -55,7 +56,7 @@ export class CommentsController {
             postId:      comment.postId,
             content:     comment.content,
             username:    comment.username,
-            feedOwnerId: createCommentDto.userId,
+            feedOwnerId: createCommentDto.feedOwnerId,
         });
 
         return comment;
@@ -78,20 +79,21 @@ export class CommentsController {
         @Param("id", ParseObjectIdPipe) id: string,
     ) {
         const comment = await this.commentsService.findOneById(id);
-        console.log("<<=|X|=>> ~ file: comments.controller.ts ~ line 86 ~ CommentsController ~ comment", comment);
 
         if (!comment) {
             throw new NotFoundException("Comment not found");
         }
 
-        const res = await comment.delete();
-        console.log("<<=|X|=>> ~ file: comments.controller.ts ~ line 86 ~ CommentsController ~ comment", comment);
-        console.log("<<=|X|=>> ~ file: comments.controller.ts ~ line 92 ~ CommentsController ~ res", res);
+        if (comment.userId !== user.id) {
+            throw new UnauthorizedException("You can delete only your comments");
+        }
+
+        await comment.delete();
 
         this.rabbitmqService.emit<Subjects.CommentDeleted, CommentDeletedEvent>(Subjects.CommentDeleted, {
             id,
-            postId: comment.postId,
-            userId: user.id,
+            postId:      comment.postId,
+            feedOwnerId: comment.feedOwnerId,
         });
     }
 }

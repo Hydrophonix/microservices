@@ -15,7 +15,7 @@ export class CreateCommentDto {
     @IsNotEmpty()
     @IsString()
     @IsMongoId()
-    userId: string;
+    feedOwnerId: string;
 
     @IsNotEmpty()
     @IsString()

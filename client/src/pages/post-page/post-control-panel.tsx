@@ -8,10 +8,10 @@ import { comments }              from "../../state/domains/comments";
 
 interface PostControlPanelProps {
     postId: string;
-    userId?: string;
+    feedOwnerId?: string;
 }
 
-export const PostControlPanel: FC<PostControlPanelProps> = ({ postId, userId }) => {
+export const PostControlPanel: FC<PostControlPanelProps> = ({ postId, feedOwnerId }) => {
     const dispatch = useAppDispatch();
 
     const [ comment, setComment ] = useState("");
@@ -20,7 +20,7 @@ export const PostControlPanel: FC<PostControlPanelProps> = ({ postId, userId }) 
         dispatch(comments.create({
             content: comment,
             postId,
-            userId,
+            feedOwnerId,
         }));
         setComment("");
     };

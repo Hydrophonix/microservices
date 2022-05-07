@@ -11,13 +11,13 @@ import { RootState }            from "../../../store";
 
 export function* callCreateCommentWorker({ payload }: PayloadAction<CreateCommentPayload>) {
     try {
-        let userId = payload.userId;
+        let feedOwnerId = payload.feedOwnerId;
 
-        userId ??= yield select((state: RootState) => state.feed.userId);
+        feedOwnerId ??= yield select((state: RootState) => state.feed.userId);
 
         const { data }: SagaReturnType<typeof commentsAPI.create> = yield call(
             commentsAPI.create,
-            { ...payload, userId },
+            { ...payload, feedOwnerId },
         );
 
         yield put(comments.createSuccess(data));

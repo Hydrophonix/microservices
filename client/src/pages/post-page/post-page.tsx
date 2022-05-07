@@ -14,6 +14,7 @@ import { Error, PageContainer } from "../../elements";
 import { Post }                                  from "../../state/domains/posts/posts.types";
 import { posts, useAppDispatch, useAppSelector } from "../../state";
 import { PostControlPanel }                      from "./post-control-panel";
+import { comments }                              from "../../state/domains/comments";
 
 export const PostPage: FC = () => {
     const { state } = useLocation<Post|null>();
@@ -29,6 +30,13 @@ export const PostPage: FC = () => {
             dispatch(posts.get(postId));
         }
     }, [ postId, dispatch, post ]);
+
+
+    useEffect(() => {
+        post?.comments
+            ? dispatch(comments.set(post!.comments))
+            : post && dispatch(comments.find(post.id));
+    }, [ dispatch, post ]);
 
 
     if (loading || (!post && !error)) {
@@ -54,8 +62,8 @@ export const PostPage: FC = () => {
             </Typography>
 
             <PostControlPanel
+                feedOwnerId = { post?.userId }
                 postId = { post!.id }
-                userId = { post?.userId }
             />
 
             <Comments />

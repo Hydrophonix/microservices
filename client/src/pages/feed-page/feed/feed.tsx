@@ -8,7 +8,6 @@ import { Post }           from "./post";
 
 export const Feed: FC = () => {
     const { isLoading, posts } = useAppSelector((state) => state.feed);
-    console.log("<<=|X|=>> ~ file: feed.tsx ~ line 11 ~ posts", posts);
 
     if (isLoading) {
         return (

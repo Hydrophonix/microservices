@@ -22,7 +22,7 @@
         "test:e2e": "jest --config ./test/jest-e2e.json"
     },
     "dependencies": {
-        "@hydro-microservices/common": "^1.0.14",
+        "@hydro-microservices/common": "^1.0.21",
         "@nestjs/cli": "^8.1.5",
         "@nestjs/common": "^8.2.2",
         "@nestjs/config": "^1.1.0",
